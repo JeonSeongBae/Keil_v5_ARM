@@ -190,6 +190,13 @@ void Motor_control(){
 	
    for(;;)
     {
+	   // if(flag == 1){
+	   //	Motor_Stop();
+	   //	Motor_BackWard();
+	   //	osDelay(1000);
+	   //	Motor_Stop();
+	   //	break;
+	   // }
             if(result == 1)
 						{
 							Motor_Stop();

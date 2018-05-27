@@ -168,6 +168,12 @@ void Detect_obstacle(){
 
 	for(;;)
     {
+		// osDelay(500); //0.5초마다 값을 읽어온다.
+		// if(uwDiffCapture2/58 < 20){
+		// 	flag = 1;
+		// } else{
+		//	flag = 0;
+		// }
 						osDelay(500);
             if( uwDiffCapture2/58 > 0 && uwDiffCapture2/58 <10  )
             {         

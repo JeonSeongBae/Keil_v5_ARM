@@ -47,8 +47,50 @@
 /* Exported constants --------------------------------------------------------*/
 /* User can use this section to tailor TIMx instance used and associated 
    resources */
-#define READY 3
 
+/* Definition for ADCx clock resources */
+#define ADCx                            ADC3
+#define ADCx_CLK_ENABLE()               __ADC3_CLK_ENABLE();
+#define ADCx_CHANNEL_GPIO_CLK_ENABLE()  __GPIOF_CLK_ENABLE()
+     
+#define ADCx_FORCE_RESET()              __ADC_FORCE_RESET()
+#define ADCx_RELEASE_RESET()            __ADC_RELEASE_RESET()
+
+/* Definition for ADCx Channel Pin */
+#define ADCx_CHANNEL_PIN                GPIO_PIN_10
+#define ADCx_CHANNEL_GPIO_PORT          GPIOF 
+
+/* Definition for ADCx's Channel */
+#define ADCx_CHANNEL                    ADC_CHANNEL_8
+	 
+/* Definition for TIMx clock resources */
+#define TIMx                           TIM3
+#define TIMx_CLK_ENABLE                __TIM3_CLK_ENABLE
+
+#define USARTx                           USART3
+#define USARTx_CLK_ENABLE()              __USART3_CLK_ENABLE();
+#define USARTx_RX_GPIO_CLK_ENABLE()      __GPIOB_CLK_ENABLE()
+#define USARTx_TX_GPIO_CLK_ENABLE()      __GPIOB_CLK_ENABLE() 
+
+#define USARTx_FORCE_RESET()             __USART3_FORCE_RESET()
+#define USARTx_RELEASE_RESET()           __USART3_RELEASE_RESET()
+
+/* Definition for USARTx Pins */
+#define USARTx_TX_PIN                    GPIO_PIN_10
+#define USARTx_TX_GPIO_PORT              GPIOB
+#define USARTx_TX_AF                     GPIO_AF7_USART3
+#define USARTx_RX_PIN                    GPIO_PIN_11
+#define USARTx_RX_GPIO_PORT              GPIOB
+#define USARTx_RX_AF                     GPIO_AF7_USART3
+
+/* Definition for USARTx Pins */
+#define TIMx_CHANNEL_GPIO_PORT()       __GPIOC_CLK_ENABLE()
+#define GPIO_PIN_CHANNEL1              GPIO_PIN_6
+#define GPIO_PIN_CHANNEL2              GPIO_PIN_7
+#define GPIO_PIN_CHANNEL3              GPIO_PIN_8
+#define GPIO_PIN_CHANNEL4              GPIO_PIN_9
+  
+#define READY 3
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 

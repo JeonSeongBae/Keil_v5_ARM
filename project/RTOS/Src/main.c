@@ -137,42 +137,75 @@ PUTCHAR_PROTOTYPE
   * @retval None
   */
 
-/*********************************  task ************************************/
-uint32_t flag = 0;
 
- /*******학번 : 201800000  , 이름 : OOO *******/
+ //왼쪽으로 90도 돌기위한 함수
+ void turnLeft(){
+               int i;
+               
+               for(i=0; i<30; i++) {
+                           Motor_Stop();
+                           osDelay(100); // 여기 딜레이를 낮추면 좀더 부드럽게 돌 수 있다.
+								 
+                           motorInterrupt1 = 1;		// 바퀴 회전 값 초기화
+                           Motor_Left();
+                                                
+                           while(motorInterrupt1 < 30) { 										// 1회 회전시 바퀴 회전수 30만큼 회전 (약 3도)
+                                    vTaskDelay(1/portTICK_RATE_MS);  // motorInterrupt1 값을 읽어오기 위한 딜레이
+                           }
+                           Motor_Stop();
+                }
+}
+
+
+
+/*********************************  task ************************************/
+uint32_t result = 0;
+uint32_t forward = 0;
+
 void Detect_obstacle(){
   osDelay(200);  // 태스크 만든 후 약간의 딜레이
 	printf("\r\n Detect_obstacle");
 
 	for(;;)
     {
-						osDelay(500);  //0.5 초마다 값을 읽어온다.(자유롭게 변경할 것)
-						
-			
-						//여기에 초음파 측정 관련 코드 작성
-			
-			
+						osDelay(500);
+            if( uwDiffCapture2/58 > 0 && uwDiffCapture2/58 <10  )
+            {         
+                  result = 1;
+                     printf("\r\n result = %d", result);
+                     
+            }
+            else
+            {
+                  result = 0;
+                     printf("\r\n result = %d", result);
+            }
     }
 }
 
-/*******학번 : 201800000  , 이름 : OOO *******/
 void Motor_control(){
 	osDelay(200);  // 태스크 만든 후 약간의 딜레이
 	printf("\r\n Motor_control");
-	Motor_Forward();  //태스크 시작시 전진한다.
+	Motor_Forward();
 	
    for(;;)
     {
+            if(result == 1)
+						{
+							Motor_Stop();
+						  turnLeft();
+						  Motor_Stop();
+							osDelay(2000); // 돌고난 후에 2초간 딜레이를 줌으로써 turn 확인해봄(나중에 지움)
+						}
 
-						//여기에 모터 제어 관련 코드 작성
-			
+
+
     }
    
 }
 
 /*적외선 태스크 부분 - 나중에 사용(선택) */
-/*void IR_Sensor(){
+void IR_Sensor(){
    for(;;){
       
       HAL_ADC_Start(&AdcHandle1);
@@ -193,7 +226,7 @@ void Motor_control(){
    }
    
 }
-*/
+
 
 /***************************************************************************/
 int main(void)
@@ -403,41 +436,19 @@ int main(void)
 	 /**** ES+L9.+Embedded+OS - 28 page 참고 ****/
 		 
 	 /**********여기에 Task 를 생성하시오********/
-	
+	 /*******학번 : 201800000  , 이름 : OOO *******/
+	 
+	 xTaskCreate( Detect_obstacle, "obstacle", 1000, NULL, 2, NULL);
+	 xTaskCreate( IR_Sensor, "IR", 1000, NULL, 2, NULL);
+	 xTaskCreate( Motor_control, "motor", 1000, NULL, 2, NULL);
+
+	 vTaskStartScheduler();
+	 
+	 
+	 
 	 
 
 	 
-	 
-
-	 
-  
-   /* Infinite loop  -  적외선 값을 읽어온다 */
-   while(1)
-   {
-      HAL_ADC_Start(&AdcHandle3);
-      //현재 ADC 값을 읽어온다.
-      uhADCxForward = HAL_ADC_GetValue(&AdcHandle3);
-      HAL_ADC_PollForConversion(&AdcHandle3, 0xFF);
-      if(uhADCxForward >2000) uhADCxForward= 2000;
-      else if(uhADCxForward<100)   uhADCxForward = 100;
-      printf("\r\nIR sensor Forward = %d", uhADCxForward);
-   
-      HAL_ADC_Start(&AdcHandle1);
-      uhADCxLeft = HAL_ADC_GetValue(&AdcHandle1);
-      HAL_ADC_PollForConversion(&AdcHandle1, 0xFF);   
-      if(uhADCxLeft >2000) uhADCxLeft= 2000;
-      else if(uhADCxLeft<100) uhADCxLeft = 100;
-      printf("\r\nIR sensor Left = %d", uhADCxLeft);
-      
-      HAL_ADC_Start(&AdcHandle2);
-      uhADCxRight = HAL_ADC_GetValue(&AdcHandle2);
-      HAL_ADC_PollForConversion(&AdcHandle2, 0xFF);
-      if(uhADCxRight >2000) uhADCxRight= 2000;
-      else if(uhADCxRight<100) uhADCxRight = 100;
-      printf("\r\nIR sensor Right = %d", uhADCxRight);
-
-      HAL_Delay(500);
-   }
    
 }
 
@@ -569,40 +580,49 @@ void assert_failed(uint8_t* file, uint32_t line)
 
 #endif
 
- void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
- {
-   switch(GPIO_Pin)
-   {
-      case GPIO_PIN_15 :
-         encoder_right = HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_3);
-         if(encoder_right == 0)
-         {
-            motorInterrupt1++;
-            encoder_right = READY;
-         }
-         else if(encoder_right == 1)
-         {
-            motorInterrupt1--;
-            encoder_right = READY;
-         }
-         break;
-      
-      case GPIO_PIN_4 :
-         encoder_left = HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_5);
-         if(encoder_left == 0)
-         {
-            motorInterrupt2++;            
-            encoder_left = READY;
-         }      
-         else if(encoder_left == 1)
-         {
-            motorInterrupt2--;
-            encoder_left = READY;
-         }   
-         break;
-   }
- }
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+								switch(GPIO_Pin)
+								{
+								case GPIO_PIN_15:
+																encoder_right = HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_3);
+																if(encoder_right == 0)
+																{
+																								if(motorInterrupt1==0)
+																																motorInterrupt1=20000;
+																								motorInterrupt1--;
+																								encoder_right = 3;
 
+																}
+																else if(encoder_right == 1)
+																{
+																								motorInterrupt1++;
+																								encoder_right = 3;
+																								if(motorInterrupt1==20000)
+																																motorInterrupt1=0;
+																}
+																break;
+
+								case GPIO_PIN_4:
+																encoder_left = HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_5);
+																if(encoder_left == 0)
+																{
+																								motorInterrupt2++;
+																								encoder_left =3;
+																								if(motorInterrupt2==20000)
+																																motorInterrupt2=0;
+																}
+																else if(encoder_left == 1)
+																{
+																								if(motorInterrupt2==0)
+																																motorInterrupt2=20000;
+																								motorInterrupt2--;
+																								encoder_left =3;
+
+																}
+																break;
+								}
+}
  
  
 /**

@@ -28,19 +28,28 @@ Project File Date:  04/29/2018
 *** Using Compiler 'V5.06 update 1 (build 61)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'PWM(Motor)'
 compiling main.c...
-..\Src\main.c(330): error:  #20: identifier "ADC_CLOCKPRESC7ALER_PCLK_DIV2" is undefined
-     AdcHandle1.Init.ClockPrescaler = ADC_CLOCKPRESC7ALER_PCLK_DIV2;
-..\Src\main.c(777): warning:  #1-D: last line of file ends without a newline
+..\Src\main.c(440): warning:  #167-D: argument of type "void (*)()" is incompatible with parameter of type "pdTASK_CODE"
+  	 
+TaskCreate( Detect_obstacle, "obstacle", 1000, NULL, 2, NULL);
+..\Src\main.c(441): warning:  #167-D: argument of type "void (*)()" is incompatible with parameter of type "pdTASK_CODE"
+  	 
+TaskCreate( IR_Sensor, "IR", 1000, NULL, 2, NULL);
+..\Src\main.c(442): warning:  #167-D: argument of type "void (*)()" is incompatible with parameter of type "pdTASK_CODE"
+  	 
+TaskCreate( Motor_control, "motor", 1000, NULL, 2, NULL);
+..\Src\main.c(796): warning:  #1-D: last line of file ends without a newline
   /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-..\Src\main.c: 1 warning, 1 error
-".\output\PWM(Motor).axf" - 1 Error(s), 1 Warning(s).
+..\Src\main.c: 4 warnings, 0 errors
+linking...
+Program Size: Code=17420 RO-data=500 RW-data=240 ZI-data=27832  
+FromELF: creating hex file...
+".\output\PWM(Motor).axf" - 0 Error(s), 4 Warning(s).
 
 <h2>Collection of Component include folders:</h2>
   C:\Users\Hyeok-soo Jang\Desktop\임베디드\2018\9주차\Lab9_RTOS\project\RTOS\MDK-ARM\RTE
   C:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.4.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include
 
 <h2>Collection of Component Files used:</h2>
-Target not created.
 Build Time Elapsed:  00:00:02
 </pre>
 </body>

@@ -144,14 +144,14 @@ PUTCHAR_PROTOTYPE
                
                for(i=0; i<30; i++) {
                            Motor_Stop();
+
                            osDelay(100); // 여기 딜레이를 낮추면 좀더 부드럽게 돌 수 있다.
 								 
                            motorInterrupt1 = 1;		// 바퀴 회전 값 초기화
                            Motor_Left();
                                                 
                            while(motorInterrupt1 < 30) { 										// 1회 회전시 바퀴 회전수 30만큼 회전 (약 3도)
-                                    vTaskDelay(1/portTICK_RATE_MS);  // motorInterrupt1 값을 읽어오기 위한 딜레이
-                           }
+                                    vTaskDelay(1/portTICK_RATE_MS);  // motorInterrupt1 값을 읽어오기 위한 딜레이                           }
                            Motor_Stop();
                 }
 }
@@ -168,6 +168,7 @@ void Detect_obstacle(){
 
 	for(;;)
     {
+
 		// osDelay(500); //0.5초마다 값을 읽어온다.
 		// if(uwDiffCapture2/58 < 20){
 		// 	flag = 1;
@@ -196,6 +197,7 @@ void Motor_control(){
 	
    for(;;)
     {
+
 	   // if(flag == 1){
 	   //	Motor_Stop();
 	   //	Motor_BackWard();
@@ -208,6 +210,7 @@ void Motor_control(){
 							Motor_Stop();
 						  turnLeft();
 						  Motor_Stop();
+
 							osDelay(2000); // 돌고난 후에 2초간 딜레이를 줌으로써 turn 확인해봄(나중에 지움)
 						}
 
@@ -327,7 +330,6 @@ int main(void)
    
    if(HAL_TIM_IC_Init(&TimHandle3) != HAL_OK){ Error_Handler();}
 	 
-	 
 
    /* Configure the Input Capture of channel 2 */
    sICConfig.ICPolarity  = TIM_ICPOLARITY_RISING;
@@ -345,8 +347,7 @@ int main(void)
    HAL_TIM_IC_Start_IT(&TimHandle3, TIM_CHANNEL_4) ;
 
    uwPrescalerValue = (SystemCoreClock / 2 / 131099) - 1;
-      
-      
+
    TimHandle4.Instance = TIM10;
 
    TimHandle4.Init.Prescaler     = uwPrescalerValue;
@@ -445,24 +446,13 @@ int main(void)
    HAL_ADC_ConfigChannel(&AdcHandle3, &adcConfig3);
 		/************************************** 적외선 끝**************************************/            
             
-   
 	 /**** ES+L9.+Embedded+OS - 28 page 참고 ****/
 		 
-	 /**********여기에 Task 를 생성하시오********/
-	 /*******학번 : 201800000  , 이름 : OOO *******/
-	 
+	 /**********여기에 Task 를 생성하시오********/	 
 	 xTaskCreate( Detect_obstacle, "obstacle", 1000, NULL, 2, NULL);
 	 xTaskCreate( IR_Sensor, "IR", 1000, NULL, 2, NULL);
 	 xTaskCreate( Motor_control, "motor", 1000, NULL, 2, NULL);
-
 	 vTaskStartScheduler();
-	 
-	 
-	 
-	 
-
-	 
-   
 }
 
 void Motor_Forward(void)

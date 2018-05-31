@@ -137,23 +137,38 @@ PUTCHAR_PROTOTYPE
   * @retval None
   */
 
-
- //ì™¼ìª½ìœ¼ë¡œ 90ë„ ëŒê¸°ìœ„í•œ í•¨ìˆ˜
+ //¿ŞÂÊÀ¸·Î 90µµ µ¹±âÀ§ÇÑ ÇÔ¼ö
  void turnLeft(){
                int i;
                
-               for(i=0; i<30; i++) {
+               for(i=0; i<10; i++) {
                            Motor_Stop();
-
-                           osDelay(100); // ì—¬ê¸° ë”œë ˆì´ë¥¼ ë‚®ì¶”ë©´ ì¢€ë” ë¶€ë“œëŸ½ê²Œ ëŒ ìˆ˜ ìˆë‹¤.
 								 
-                           motorInterrupt1 = 1;		// ë°”í€´ íšŒì „ ê°’ ì´ˆê¸°í™”
-                           Motor_Left();
+                           motorInterrupt1 = 1;
+														Motor_Left();
                                                 
-                           while(motorInterrupt1 < 30) { 										// 1íšŒ íšŒì „ì‹œ ë°”í€´ íšŒì „ìˆ˜ 30ë§Œí¼ íšŒì „ (ì•½ 3ë„)
-                                    vTaskDelay(1/portTICK_RATE_MS);  // motorInterrupt1 ê°’ì„ ì½ì–´ì˜¤ê¸° ìœ„í•œ ë”œë ˆì´                           }
+                           while(motorInterrupt1 < 15) { 										// 1È¸ È¸Àü½Ã ¹ÙÄû È¸Àü¼ö 30¸¸Å­ È¸Àü (¾à 3µµ)
+                                    vTaskDelay(1/portTICK_RATE_MS);  // motorInterrupt1 °ªÀ» ÀĞ¾î¿À±â À§ÇÑ µô·¹ÀÌ
+                           }
+
                            Motor_Stop();
                 }
+}
+ 
+ //¿À¸¥ÂÊÀ¸·Î 90µµ µ¹±âÀ§ÇÑ ÇÔ¼ö
+ void turnRight(){
+             int j;
+             for(j=0; j<10; j++) {
+							Motor_Stop();
+							//osDelay(100); // ¿©±â µô·¹ÀÌ¸¦ ³·Ãß¸é Á»´õ ºÎµå·´°Ô µ¹ ¼ö ÀÖ´Ù.
+							motorInterrupt2 = 1; // ¹ÙÄû È¸Àü °ª ÃÊ±âÈ­
+							Motor_Right();
+                                               
+							while(motorInterrupt2 < 15) { 										// 1È¸ È¸Àü½Ã ¹ÙÄû È¸Àü¼ö 30¸¸Å­ È¸Àü (¾à 3µµ)
+								vTaskDelay(1/portTICK_RATE_MS);  // motorInterrupt1 °ªÀ» ÀĞ¾î¿À±â À§ÇÑ µô·¹ÀÌ
+							}
+							Motor_Stop();
+							} 						 						 
 }
 
 
@@ -168,15 +183,8 @@ void Detect_obstacle(){
 
 	for(;;)
     {
-
-		// osDelay(500); //0.5ì´ˆë§ˆë‹¤ ê°’ì„ ì½ì–´ì˜¨ë‹¤.
-		// if(uwDiffCapture2/58 < 20){
-		// 	flag = 1;
-		// } else{
-		//	flag = 0;
-		// }
 						osDelay(500);
-            if( uwDiffCapture2/58 > 0 && uwDiffCapture2/58 <10  )
+            if( uwDiffCapture2/58 > 0 && uwDiffCapture2/58 <30  )
             {         
                   result = 1;
                      printf("\r\n result = %d", result);
@@ -191,27 +199,26 @@ void Detect_obstacle(){
 }
 
 void Motor_control(){
-	osDelay(200);  // íƒœìŠ¤í¬ ë§Œë“  í›„ ì•½ê°„ì˜ ë”œë ˆì´
+	osDelay(200);
 	printf("\r\n Motor_control");
 	Motor_Forward();
 	
    for(;;)
     {
 
-	   // if(flag == 1){
-	   //	Motor_Stop();
-	   //	Motor_BackWard();
-	   //	osDelay(1000);
-	   //	Motor_Stop();
-	   //	break;
-	   // }
             if(result == 1)
 						{
 							Motor_Stop();
-						  turnLeft();
+							if(uwDiffCapture1 < uwDiffCapture3){
+								turnLeft();
+							}else{
+								turnRight();
+							}
 						  Motor_Stop();
+							//osDelay(2000); // µ¹°í³­ ÈÄ¿¡ 2ÃÊ°£ µô·¹ÀÌ¸¦ ÁÜÀ¸·Î½á turn È®ÀÎÇØº½(³ªÁß¿¡ Áö¿ò)
+						}else{
+							Motor_Forward(); 
 
-							osDelay(2000); // ëŒê³ ë‚œ í›„ì— 2ì´ˆê°„ ë”œë ˆì´ë¥¼ ì¤Œìœ¼ë¡œì¨ turn í™•ì¸í•´ë´„(ë‚˜ì¤‘ì— ì§€ì›€)
 						}
 
 
@@ -220,7 +227,7 @@ void Motor_control(){
    
 }
 
-/*ì ì™¸ì„  íƒœìŠ¤í¬ ë¶€ë¶„ - ë‚˜ì¤‘ì— ì‚¬ìš©(ì„ íƒ) */
+/*Àû¿Ü¼± ÅÂ½ºÅ© ºÎºĞ - ³ªÁß¿¡ »ç¿ë(¼±ÅÃ) */
 void IR_Sensor(){
    for(;;){
       

@@ -142,18 +142,34 @@ PUTCHAR_PROTOTYPE
  void turnLeft(){
                int i;
                
-               for(i=0; i<30; i++) {
+               for(i=0; i<10; i++) {
                            Motor_Stop();
-                           osDelay(100); // 여기 딜레이를 낮추면 좀더 부드럽게 돌 수 있다.
+                          // osDelay(100); // 여기 딜레이를 낮추면 좀더 부드럽게 돌 수 있다.
 								 
                            motorInterrupt1 = 1;		// 바퀴 회전 값 초기화
                            Motor_Left();
                                                 
-                           while(motorInterrupt1 < 30) { 										// 1회 회전시 바퀴 회전수 30만큼 회전 (약 3도)
+                           while(motorInterrupt1 < 15) { 										// 1회 회전시 바퀴 회전수 30만큼 회전 (약 3도)
                                     vTaskDelay(1/portTICK_RATE_MS);  // motorInterrupt1 값을 읽어오기 위한 딜레이
                            }
                            Motor_Stop();
                 }
+}
+ 
+ //오른쪽으로 90도 돌기위한 함수
+ void turnRight(){
+             int j;
+             for(j=0; j<10; j++) {
+							Motor_Stop();
+							//osDelay(100); // 여기 딜레이를 낮추면 좀더 부드럽게 돌 수 있다.
+							motorInterrupt2 = 1; // 바퀴 회전 값 초기화
+							Motor_Right();
+                                               
+							while(motorInterrupt2 < 15) { 										// 1회 회전시 바퀴 회전수 30만큼 회전 (약 3도)
+								vTaskDelay(1/portTICK_RATE_MS);  // motorInterrupt1 값을 읽어오기 위한 딜레이
+							}
+							Motor_Stop();
+							} 						 						 
 }
 
 
@@ -169,7 +185,7 @@ void Detect_obstacle(){
 	for(;;)
     {
 						osDelay(500);
-            if( uwDiffCapture2/58 > 0 && uwDiffCapture2/58 <10  )
+            if( uwDiffCapture2/58 > 0 && uwDiffCapture2/58 <30  )
             {         
                   result = 1;
                      printf("\r\n result = %d", result);
@@ -193,9 +209,15 @@ void Motor_control(){
             if(result == 1)
 						{
 							Motor_Stop();
-						  turnLeft();
+							if(uwDiffCapture1 < uwDiffCapture3){
+								turnLeft();
+							}else{
+								turnRight();
+							}
 						  Motor_Stop();
-							osDelay(2000); // 돌고난 후에 2초간 딜레이를 줌으로써 turn 확인해봄(나중에 지움)
+							//osDelay(2000); // 돌고난 후에 2초간 딜레이를 줌으로써 turn 확인해봄(나중에 지움)
+						}else{
+							Motor_Forward(); 
 						}
 
 

@@ -147,7 +147,7 @@ PUTCHAR_PROTOTYPE
                            motorInterrupt1 = 1;
 														Motor_Left();
                                                 
-                           while(motorInterrupt1 < 7.5) { 										// 1È¸ È¸Àü½Ã ¹ÙÄû È¸Àü¼ö 30¸¸Å­ È¸Àü (¾à 3µµ)
+                           while(motorInterrupt1 < 7.5) { 										// 1È¸ È¸Àü½Ã ¹ÙÄû È¸Àü¼ö 7.5¸¸Å­ È¸Àü (¾à 3µµ)
                                     vTaskDelay(1/portTICK_RATE_MS);  // motorInterrupt1 °ªÀ» ÀÐ¾î¿À±â À§ÇÑ µô·¹ÀÌ
                            }
 
@@ -164,7 +164,7 @@ PUTCHAR_PROTOTYPE
 							motorInterrupt2 = 1; // ¹ÙÄû È¸Àü °ª ÃÊ±âÈ­
 							Motor_Right();
                                                
-							while(motorInterrupt2 < 7.5) { 										// 1È¸ È¸Àü½Ã ¹ÙÄû È¸Àü¼ö 30¸¸Å­ È¸Àü (¾à 3µµ)
+							while(motorInterrupt2 < 7.5) { 										// 1È¸ È¸Àü½Ã ¹ÙÄû È¸Àü¼ö 7.5¸¸Å­ È¸Àü (¾à 3µµ)
 								vTaskDelay(1/portTICK_RATE_MS); 					// motorInterrupt1 °ªÀ» ÀÐ¾î¿À±â À§ÇÑ µô·¹ÀÌ
 							}
 							Motor_Stop();
@@ -176,16 +176,13 @@ PUTCHAR_PROTOTYPE
                int i;
                
                for(i=0; i<5; i++) {
-                           Motor_Stop();
-								 
-                           motorInterrupt1 = 1;
-														Motor_Left();
-                                                
-                           while(motorInterrupt1 < 2) { 										// 1È¸ È¸Àü½Ã ¹ÙÄû È¸Àü¼ö 30¸¸Å­ È¸Àü (¾à 3µµ)
-                                    vTaskDelay(1/portTICK_RATE_MS);  // motorInterrupt1 °ªÀ» ÀÐ¾î¿À±â À§ÇÑ µô·¹ÀÌ
-                           }
-
-                           Motor_Stop();
+										Motor_Stop();
+										motorInterrupt1 = 1;
+										Motor_Left();
+										while(motorInterrupt1 < 2) { 										// 1È¸ È¸Àü½Ã ¹ÙÄû È¸Àü¼ö 2¸¸Å­ È¸Àü
+												vTaskDelay(1/portTICK_RATE_MS);  // motorInterrupt1 °ªÀ» ÀÐ¾î¿À±â À§ÇÑ µô·¹ÀÌ
+										}
+										Motor_Stop();
                 }
 }
  
@@ -197,8 +194,7 @@ PUTCHAR_PROTOTYPE
 							//osDelay(100); // ¿©±â µô·¹ÀÌ¸¦ ³·Ãß¸é Á»´õ ºÎµå·´°Ô µ¹ ¼ö ÀÖ´Ù.
 							motorInterrupt2 = 1; // ¹ÙÄû È¸Àü °ª ÃÊ±âÈ­
 							Motor_Right();
-                                               
-							while(motorInterrupt2 < 2) { 										// 1È¸ È¸Àü½Ã ¹ÙÄû È¸Àü¼ö 30¸¸Å­ È¸Àü (¾à 3µµ)
+							while(motorInterrupt2 < 2) { 										// 1È¸ È¸Àü½Ã ¹ÙÄû È¸Àü¼ö 2¸¸Å­ È¸Àü
 								vTaskDelay(1/portTICK_RATE_MS); 					// motorInterrupt1 °ªÀ» ÀÐ¾î¿À±â À§ÇÑ µô·¹ÀÌ
 							}
 							Motor_Stop();
@@ -212,9 +208,8 @@ uint32_t result = 0;
 uint32_t forward = 0;
 
 void Detect_obstacle(){
-  osDelay(200);  // íƒœìŠ¤í¬ ë§Œë“  í›„ ì•½ê°„ì˜ ë”œë ˆì´
+  osDelay(200);
 	printf("\r\n Detect_obstacle");
-
 	for(;;)
     {
 						osDelay(100);
@@ -239,7 +234,6 @@ void Motor_control(){
 	
    for(;;)
     {
-
             if(result == 1)
 						{
 							Motor_Stop();
@@ -249,25 +243,21 @@ void Motor_control(){
 							turnRight();
 							}
 						  Motor_Stop();
-							//osDelay(2000); // µ¹°í³­ ÈÄ¿¡ 2ÃÊ°£ µô·¹ÀÌ¸¦ ÁÜÀ¸·Î½á turn È®ÀÎÇØº½(³ªÁß¿¡ Áö¿ò)
+							//osDelay(2000);
+							// µ¹°í³­ ÈÄ¿¡ 2ÃÊ°£ µô·¹ÀÌ¸¦ ÁÜÀ¸·Î½á turn È®ÀÎÇØº½(³ªÁß¿¡ Áö¿ò)
 						}else if(result == 0){
 							Motor_Forward(); 
 
 						}else if(result == 3){
-														Motor_Stop();
-
+									Motor_Stop();
 									turnLeft2();
-														Motor_Stop();
-
+									Motor_Stop();
 						}else if(result == 4){
-							Motor_Stop();
-
-							turnRight2();
-														Motor_Stop();
-
+									Motor_Stop();
+									turnRight2();
+									Motor_Stop();
 						}
-    }
-   
+    }  
 }
 
 /*Àû¿Ü¼± ÅÂ½ºÅ© ºÎºÐ - ³ªÁß¿¡ »ç¿ë(¼±ÅÃ) */
@@ -289,11 +279,11 @@ void IR_Sensor(){
       else if(uhADCxRight<100) uhADCxRight = 100;
       printf("\r\nIR sensor Right = %d", uhADCxRight);
 		 
-      if(uhADCxLeft >1000){
+      if(uhADCxLeft  > 1500){
                result =4;
 				                     printf("\r\n result = %d", result);
 
-		 }else if(uhADCxRight >1000){
+		 }else if(uhADCxRight  > 1500){
 								result=3;
 			                      printf("\r\n result = %d", result);
 

@@ -147,7 +147,7 @@ PUTCHAR_PROTOTYPE
                            motorInterrupt1 = 1;
 														Motor_Left();
                                                 
-                           while(motorInterrupt1 < 15) { 										// 1»∏ »∏¿¸Ω√ πŸƒ˚ »∏¿¸ºˆ 30∏∏≈≠ »∏¿¸ (æ‡ 3µµ)
+                           while(motorInterrupt1 < 7.5) { 										// 1»∏ »∏¿¸Ω√ πŸƒ˚ »∏¿¸ºˆ 7.5∏∏≈≠ »∏¿¸ (æ‡ 3µµ)
                                     vTaskDelay(1/portTICK_RATE_MS);  // motorInterrupt1 ∞™¿ª ¿–æÓø¿±‚ ¿ß«— µÙ∑π¿Ã
                            }
 
@@ -164,8 +164,38 @@ PUTCHAR_PROTOTYPE
 							motorInterrupt2 = 1; // πŸƒ˚ »∏¿¸ ∞™ √ ±‚»≠
 							Motor_Right();
                                                
-							while(motorInterrupt2 < 15) { 										// 1»∏ »∏¿¸Ω√ πŸƒ˚ »∏¿¸ºˆ 30∏∏≈≠ »∏¿¸ (æ‡ 3µµ)
-								vTaskDelay(1/portTICK_RATE_MS);  // motorInterrupt1 ∞™¿ª ¿–æÓø¿±‚ ¿ß«— µÙ∑π¿Ã
+							while(motorInterrupt2 < 7.5) { 										// 1»∏ »∏¿¸Ω√ πŸƒ˚ »∏¿¸ºˆ 7.5∏∏≈≠ »∏¿¸ (æ‡ 3µµ)
+								vTaskDelay(1/portTICK_RATE_MS); 					// motorInterrupt1 ∞™¿ª ¿–æÓø¿±‚ ¿ß«— µÙ∑π¿Ã
+							}
+							Motor_Stop();
+							} 						 						 
+}
+ 
+ //øﬁ¬ ¿∏∑Œ 10µµ µπ±‚¿ß«— «‘ºˆ
+ void turnLeft2(){
+               int i;
+               
+               for(i=0; i<5; i++) {
+										Motor_Stop();
+										motorInterrupt1 = 1;
+										Motor_Left();
+										while(motorInterrupt1 < 2) { 										// 1»∏ »∏¿¸Ω√ πŸƒ˚ »∏¿¸ºˆ 2∏∏≈≠ »∏¿¸
+												vTaskDelay(1/portTICK_RATE_MS);  // motorInterrupt1 ∞™¿ª ¿–æÓø¿±‚ ¿ß«— µÙ∑π¿Ã
+										}
+										Motor_Stop();
+                }
+}
+ 
+ //ø¿∏•¬ ¿∏∑Œ 10µµ µπ±‚¿ß«— «‘ºˆ
+ void turnRight2(){
+             int j;
+             for(j=0; j<5; j++) {
+							Motor_Stop();
+							//osDelay(100); // ø©±‚ µÙ∑π¿Ã∏¶ ≥∑√ﬂ∏È ¡ª¥ı ∫ŒµÂ∑¥∞‘ µπ ºˆ ¿÷¥Ÿ.
+							motorInterrupt2 = 1; // πŸƒ˚ »∏¿¸ ∞™ √ ±‚»≠
+							Motor_Right();
+							while(motorInterrupt2 < 2) { 										// 1»∏ »∏¿¸Ω√ πŸƒ˚ »∏¿¸ºˆ 2∏∏≈≠ »∏¿¸
+								vTaskDelay(1/portTICK_RATE_MS); 					// motorInterrupt1 ∞™¿ª ¿–æÓø¿±‚ ¿ß«— µÙ∑π¿Ã
 							}
 							Motor_Stop();
 							} 						 						 
@@ -178,12 +208,11 @@ uint32_t result = 0;
 uint32_t forward = 0;
 
 void Detect_obstacle(){
-  osDelay(200);  // ÌÉúÏä§ÌÅ¨ ÎßåÎì† ÌõÑ ÏïΩÍ∞ÑÏùò ÎîúÎ†àÏù¥
+  osDelay(200);
 	printf("\r\n Detect_obstacle");
-
 	for(;;)
     {
-						osDelay(500);
+						osDelay(100);
             if( uwDiffCapture2/58 > 0 && uwDiffCapture2/58 <30  )
             {         
                   result = 1;
@@ -205,26 +234,30 @@ void Motor_control(){
 	
    for(;;)
     {
-
             if(result == 1)
 						{
 							Motor_Stop();
 							if(uwDiffCapture1 < uwDiffCapture3){
-								turnLeft();
+							turnLeft();
 							}else{
-								turnRight();
+							turnRight();
 							}
 						  Motor_Stop();
-							//osDelay(2000); // µπ∞Ì≥≠ »ƒø° 2√ ∞£ µÙ∑π¿Ã∏¶ ¡‹¿∏∑ŒΩ· turn »Æ¿Œ«ÿ∫Ω(≥™¡ﬂø° ¡ˆøÚ)
-						}else{
+							//osDelay(2000);
+							// µπ∞Ì≥≠ »ƒø° 2√ ∞£ µÙ∑π¿Ã∏¶ ¡‹¿∏∑ŒΩ· turn »Æ¿Œ«ÿ∫Ω(≥™¡ﬂø° ¡ˆøÚ)
+						}else if(result == 0){
 							Motor_Forward(); 
 
+						}else if(result == 3){
+									Motor_Stop();
+									turnLeft2();
+									Motor_Stop();
+						}else if(result == 4){
+									Motor_Stop();
+									turnRight2();
+									Motor_Stop();
 						}
-
-
-
-    }
-   
+    }  
 }
 
 /*¿˚ø‹º± ≈¬Ω∫≈© ∫Œ∫– - ≥™¡ﬂø° ªÁøÎ(º±≈√) */
@@ -236,7 +269,8 @@ void IR_Sensor(){
       HAL_ADC_PollForConversion(&AdcHandle1, 0xFF);   
       if(uhADCxLeft >2000) uhADCxLeft= 2000;
       else if(uhADCxLeft<100) uhADCxLeft = 100;
-      printf("\r\nIR sensor Left = %d", uhADCxLeft);
+
+		 printf("\r\nIR sensor Left = %d", uhADCxLeft);
       
       HAL_ADC_Start(&AdcHandle2);
       uhADCxRight = HAL_ADC_GetValue(&AdcHandle2);
@@ -244,7 +278,18 @@ void IR_Sensor(){
       if(uhADCxRight >2000) uhADCxRight= 2000;
       else if(uhADCxRight<100) uhADCxRight = 100;
       printf("\r\nIR sensor Right = %d", uhADCxRight);
-      
+		 
+      if(uhADCxLeft  > 1500){
+               result =4;
+				                     printf("\r\n result = %d", result);
+
+		 }else if(uhADCxRight  > 1500){
+								result=3;
+			                      printf("\r\n result = %d", result);
+
+		 }else{
+				result=0;
+		 }     
        osDelay(10);
    }
    
@@ -272,11 +317,9 @@ int main(void)
 	
 	
 	
-    /************************************** Î™®ÌÑ∞ ÏãúÏûë **************************************/
    uwPrescalerValue = (SystemCoreClock/2)/1000000;
    
 
-   // PB2 Î™®ÌÑ∞ Ï†ÑÏõê Ïù∏Í∞ÄÎ•º ÏúÑÌïú GPIO Ï¥àÍ∏∞Ìôî
    __GPIOB_CLK_ENABLE();
       
    GPIO_InitStruct.Pin = GPIO_PIN_2;
@@ -286,7 +329,7 @@ int main(void)
       
    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
    
-   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_2, GPIO_PIN_SET); // MC_EN(PB2) Î™®ÌÑ∞ Ï†ÑÏõê 
+   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_2, GPIO_PIN_SET); // MC_EN(PB2)
    
    sConfig1.OCMode     = TIM_OCMODE_PWM1;
    sConfig1.OCPolarity = TIM_OCPOLARITY_HIGH;

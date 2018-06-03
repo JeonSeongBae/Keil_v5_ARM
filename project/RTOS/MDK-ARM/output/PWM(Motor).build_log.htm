@@ -28,18 +28,18 @@ Project File Date:  05/30/2018
 *** Using Compiler 'V5.06 update 1 (build 61)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'PWM(Motor)'
 compiling main.c...
-..\Src\main.c(512): warning:  #167-D: argument of type "void (*)()" is incompatible with parameter of type "pdTASK_CODE"
+..\Src\main.c(496): warning:  #167-D: argument of type "void (*)()" is incompatible with parameter of type "pdTASK_CODE"
   	 
 TaskCreate( Detect_obstacle, "obstacle", 1000, NULL, 2, NULL);
-..\Src\main.c(513): warning:  #167-D: argument of type "void (*)()" is incompatible with parameter of type "pdTASK_CODE"
+..\Src\main.c(497): warning:  #167-D: argument of type "void (*)()" is incompatible with parameter of type "pdTASK_CODE"
   	 
 TaskCreate( IR_Sensor, "IR", 1000, NULL, 2, NULL);
-..\Src\main.c(514): warning:  #167-D: argument of type "void (*)()" is incompatible with parameter of type "pdTASK_CODE"
+..\Src\main.c(498): warning:  #167-D: argument of type "void (*)()" is incompatible with parameter of type "pdTASK_CODE"
   	 
 TaskCreate( Motor_control, "motor", 1000, NULL, 2, NULL);
 ..\Src\main.c: 3 warnings, 0 errors
 linking...
-Program Size: Code=17828 RO-data=500 RW-data=240 ZI-data=27832  
+Program Size: Code=17696 RO-data=500 RW-data=240 ZI-data=27832  
 FromELF: creating hex file...
 ".\output\PWM(Motor).axf" - 0 Error(s), 3 Warning(s).
 
@@ -48,7 +48,7 @@ FromELF: creating hex file...
   C:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.4.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include
 
 <h2>Collection of Component Files used:</h2>
-Build Time Elapsed:  00:00:02
+Build Time Elapsed:  00:00:17
 </pre>
 </body>
 </html>

@@ -143,14 +143,11 @@ PUTCHAR_PROTOTYPE
                
                for(i=0; i<10; i++) {
                            Motor_Stop();
-								 
                            motorInterrupt1 = 1;
 														Motor_Left();
-                                                
-                           while(motorInterrupt1 < 7.5) { 										// 1»∏ »∏¿¸Ω√ πŸƒ˚ »∏¿¸ºˆ 7.5∏∏≈≠ »∏¿¸ (æ‡ 3µµ)
+                           while(motorInterrupt1 < 6) { 										// 1»∏ »∏¿¸Ω√ πŸƒ˚ »∏¿¸ºˆ 7.5∏∏≈≠ »∏¿¸ (æ‡ 3µµ)
                                     vTaskDelay(1/portTICK_RATE_MS);  // motorInterrupt1 ∞™¿ª ¿–æÓø¿±‚ ¿ß«— µÙ∑π¿Ã
                            }
-
                            Motor_Stop();
                 }
 }
@@ -164,7 +161,7 @@ PUTCHAR_PROTOTYPE
 							motorInterrupt2 = 1; // πŸƒ˚ »∏¿¸ ∞™ √ ±‚»≠
 							Motor_Right();
                                                
-							while(motorInterrupt2 < 7.5) { 										// 1»∏ »∏¿¸Ω√ πŸƒ˚ »∏¿¸ºˆ 7.5∏∏≈≠ »∏¿¸ (æ‡ 3µµ)
+							while(motorInterrupt2 < 6) { 										// 1»∏ »∏¿¸Ω√ πŸƒ˚ »∏¿¸ºˆ 7.5∏∏≈≠ »∏¿¸ (æ‡ 3µµ)
 								vTaskDelay(1/portTICK_RATE_MS); 					// motorInterrupt1 ∞™¿ª ¿–æÓø¿±‚ ¿ß«— µÙ∑π¿Ã
 							}
 							Motor_Stop();
@@ -175,7 +172,7 @@ PUTCHAR_PROTOTYPE
  void turnLeft2(){
                int i;
                
-               for(i=0; i<5; i++) {
+               for(i=0; i<3; i++) {
 										Motor_Stop();
 										motorInterrupt1 = 1;
 										Motor_Left();
@@ -189,9 +186,8 @@ PUTCHAR_PROTOTYPE
  //ø¿∏•¬ ¿∏∑Œ 10µµ µπ±‚¿ß«— «‘ºˆ
  void turnRight2(){
              int j;
-             for(j=0; j<5; j++) {
+             for(j=0; j<3; j++) {
 							Motor_Stop();
-							//osDelay(100); // ø©±‚ µÙ∑π¿Ã∏¶ ≥∑√ﬂ∏È ¡ª¥ı ∫ŒµÂ∑¥∞‘ µπ ºˆ ¿÷¥Ÿ.
 							motorInterrupt2 = 1; // πŸƒ˚ »∏¿¸ ∞™ √ ±‚»≠
 							Motor_Right();
 							while(motorInterrupt2 < 2) { 										// 1»∏ »∏¿¸Ω√ πŸƒ˚ »∏¿¸ºˆ 2∏∏≈≠ »∏¿¸
@@ -213,11 +209,10 @@ void Detect_obstacle(){
 	for(;;)
     {
 						osDelay(100);
-            if( uwDiffCapture2/58 > 0 && uwDiffCapture2/58 <30  )
+            if( uwDiffCapture2/58 > 0 && uwDiffCapture2/58 < 20  )
             {         
                   result = 1;
                      printf("\r\n result = %d", result);
-                     
             }
             else
             {
@@ -243,11 +238,13 @@ void Motor_control(){
 							turnRight();
 							}
 						  Motor_Stop();
-							//osDelay(2000);
-							// µπ∞Ì≥≠ »ƒø° 2√ ∞£ µÙ∑π¿Ã∏¶ ¡‹¿∏∑ŒΩ· turn »Æ¿Œ«ÿ∫Ω(≥™¡ﬂø° ¡ˆøÚ)
 						}else if(result == 0){
-							Motor_Forward(); 
-
+							Motor_Forward();
+							if(uwDiffCapture1/58 < 1){
+								turnRight2();
+							}else if(uwDiffCapture3/58 < 1){
+								turnLeft2();
+							}
 						}else if(result == 3){
 									Motor_Stop();
 									turnLeft2();
@@ -279,11 +276,11 @@ void IR_Sensor(){
       else if(uhADCxRight<100) uhADCxRight = 100;
       printf("\r\nIR sensor Right = %d", uhADCxRight);
 		 
-      if(uhADCxLeft  > 1500){
+      if(uhADCxLeft  > 1200){
                result =4;
 				                     printf("\r\n result = %d", result);
 
-		 }else if(uhADCxRight  > 1500){
+		 }else if(uhADCxRight  > 1200){
 								result=3;
 			                      printf("\r\n result = %d", result);
 
@@ -362,12 +359,9 @@ int main(void)
    HAL_TIM_PWM_ConfigChannel(&TimHandle2, &sConfig2, TIM_CHANNEL_1);
    HAL_TIM_PWM_ConfigChannel(&TimHandle2, &sConfig2, TIM_CHANNEL_2);
 
-   EXTILine_Config(); // Encoder Interrupt Setting
-   /************************************** Î™®ÌÑ∞ ÎÅù **************************************/
+   EXTILine_Config(); // Encoder Interrupt Setting	 
 	 
 	 
-	 
-	  /************************************** Ï¥àÏùåÌåå ÏãúÏûë **************************************/
    uwPrescalerValue = ((SystemCoreClock / 2) / 1000000) - 1;   
 	 
    /* Set TIMx instance */

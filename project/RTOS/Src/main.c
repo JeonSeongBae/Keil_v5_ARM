@@ -137,43 +137,72 @@ PUTCHAR_PROTOTYPE
   * @retval None
   */
 
-
- //왼쪽으로 90도 돌기위한 함수
+//¿ÞAEA¸·I 90μμ μ¹±aA§CN CO¼o
  void turnLeft(){
-		int i;
-		Motor_Stop();
-		osDelay(500); // 여기 딜레이를 낮추면 좀더 부드럽게 돌 수 있다.
-		for(i=0; i<30; i++) {
+               int i;
+							Motor_Stop();
+							osDelay(200);
 
-				motorInterrupt1 = 1;
-				Motor_Left();
-			
-				while(motorInterrupt1 < 31.5) { 										// 1회 회전시 바퀴 회전수 7.5만큼 회전 (약 3도)
-						vTaskDelay(1/portTICK_RATE_MS);  // motorInterrupt1 값을 읽어오기 위한 딜레이
-				}
-		}
-		Motor_Stop();
-		osDelay(500); // 여기 딜레이를 낮추면 좀더 부드럽게 돌 수 있다.
+               for(i=0; i<30; i++) {
+								 
+                           motorInterrupt1 = 1;
+														Motor_Left();
+                                                
+                           while(motorInterrupt1 < 31) { 								
+                                    vTaskDelay(1/portTICK_RATE_MS);
+                           }
+                }
+							 Motor_Stop();
+							osDelay(200);
 }
  
- //오른쪽으로 90도 돌기위한 함수
  void turnRight(){
-		int j;
-		Motor_Stop();
-		osDelay(500); // 여기 딜레이를 낮추면 좀더 부드럽게 돌 수 있다.
-		for(j=0; j<30; j++) {
-
-				motorInterrupt2 = 1; // 바퀴 회전 값 초기화
-				Motor_Right();
-			
-				while(motorInterrupt2 < 31.5) { 										// 1회 회전시 바퀴 회전수 7.5만큼 회전 (약 3도)
-						vTaskDelay(1/portTICK_RATE_MS); 					// motorInterrupt1 값을 읽어오기 위한 딜레이
-				}				
-		}
-		Motor_Stop();
-		osDelay(500); // 여기 딜레이를 낮추면 좀더 부드럽게 돌 수 있다.		
+             int j;
+	 Motor_Stop();
+							osDelay(200);
+             for(j=0; j<30; j++) {
+							motorInterrupt2 = 1; 
+							Motor_Right();
+                                               
+							while(motorInterrupt2 < 31) { 						
+								vTaskDelay(1/portTICK_RATE_MS);
+							}
+							} 		
+Motor_Stop();
+							osDelay(200);						 
 }
+ 
 
+ void turnLeft2(){
+               int i;
+               
+               for(i=0; i<3; i++) {
+                           Motor_Stop();
+								 
+                           motorInterrupt1 = 1;
+														Motor_Left();
+                                                
+                           while(motorInterrupt1 < 2) { 								
+                                    vTaskDelay(1/portTICK_RATE_MS);  
+                           }
+
+                           Motor_Stop();
+                }
+}
+ 
+ void turnRight2(){
+             int j;
+             for(j=0; j<3; j++) {
+							Motor_Stop();
+							motorInterrupt2 = 1; //
+							Motor_Right();
+                                               
+							while(motorInterrupt2 < 2) {
+								vTaskDelay(1/portTICK_RATE_MS); 
+							}
+							Motor_Stop();
+							} 						 						 
+}
 
 
 
@@ -182,69 +211,93 @@ uint32_t result = 0;
 uint32_t forward = 0;
 
 void Detect_obstacle(){
-		osDelay(2000);
-		for(;;)
-		{
-				if( uwDiffCapture2/58 > 0 && uwDiffCapture2/58 < 15){         
-						result = 1;
-				}else if(uhADCxLeft>1500){
-						turnRight();
-						result = 1;					
-				}else if(uhADCxRight>1500){
-						turnLeft();
-						result = 1;					
-				}else{
-						result = 0;
-				}
-		}
-}
+  osDelay(200);
+	printf("\r\n Detect_obstacle");
 
+	for(;;)
+    {
+						osDelay(100);
+            if( uwDiffCapture2/58 > 0 && uwDiffCapture2/58 < 18 )
+            {         
+                  result = 1;
+                     printf("\r\n result = %d", result);
+                     
+            }
+            else
+            {
+                  result = 0;
+                     printf("\r\n result = %d", result);
+            }
+    }
+}
 
 void Motor_control(){
-		osDelay(200);
-		Motor_Forward();
-		
-		 for(;;){
-							if(result == 1){
-										Motor_Stop();
-										if(uwDiffCapture1 < uwDiffCapture3){
-												turnLeft();
-										}else{
-												turnRight();
-										}
-										Motor_Stop();
-							}else if(result == 0){
-										Motor_Forward();
+	osDelay(200);
+	printf("\r\n Motor_control");
+	Motor_Forward();
+	
+   for(;;)
+    {
+
+            if(result == 1)
+						{
+							Motor_Stop();
+							if(uwDiffCapture1 < uwDiffCapture3){
+							turnLeft();
+							}else{
+							turnRight();
 							}
-			}  
+						  Motor_Stop();
+						}else if(result == 0){
+							Motor_Forward(); 
+
+						}else if(result == 3){
+														Motor_Stop();
+
+									turnLeft2();
+														Motor_Stop();
+
+						}else if(result == 4){
+							Motor_Stop();
+
+							turnRight2();
+														Motor_Stop();
+
+						}
+    }
+   
 }
 
-/*적외선 태스크 부분 - 나중에 사용(선택) */
+/* 적외선 생성 */
 void IR_Sensor(){
-		for(;;){
+   for(;;){
+      
+      HAL_ADC_Start(&AdcHandle1);
+      uhADCxLeft = HAL_ADC_GetValue(&AdcHandle1);
+      HAL_ADC_PollForConversion(&AdcHandle1, 0xFF);   
+      if(uhADCxLeft >2000) uhADCxLeft= 2000;
+      else if(uhADCxLeft<100) uhADCxLeft = 100;
 
-				HAL_ADC_Start(&AdcHandle1);
-				uhADCxLeft = HAL_ADC_GetValue(&AdcHandle1);
-				HAL_ADC_PollForConversion(&AdcHandle1, 0xFF);
-				
-			// 최대값 최소값 설정 (100 ~ 2000)			
-				if(uhADCxLeft >2000) uhADCxLeft= 2000;
-				else if(uhADCxLeft<100) uhADCxLeft = 100;
+		 printf("\r\nIR sensor Left = %d", uhADCxLeft);
+      
+      HAL_ADC_Start(&AdcHandle2);
+      uhADCxRight = HAL_ADC_GetValue(&AdcHandle2);
+      HAL_ADC_PollForConversion(&AdcHandle2, 0xFF);
+      if(uhADCxRight >2000) uhADCxRight= 2000;
+      else if(uhADCxRight<100) uhADCxRight = 100;
+      printf("\r\nIR sensor Right = %d", uhADCxRight);
+		 
+      if(uhADCxLeft >900){
+               result =4;
+				                     printf("\r\n result = %d", result);
 
-				HAL_ADC_Start(&AdcHandle2);
-				uhADCxRight = HAL_ADC_GetValue(&AdcHandle2);
-				HAL_ADC_PollForConversion(&AdcHandle2, 0xFF);
-				
-				// 최대값 최소값 설정 (100 ~ 2000)
-				if(uhADCxRight >2000) uhADCxRight= 2000;
-				else if(uhADCxRight<100) uhADCxRight = 100;
+		 }else if(uhADCxRight >880){
+								result=3;
+			                      printf("\r\n result = %d", result);
 
-				if(uhADCxLeft  > 1500){
-						printf("\r\nIR sensor Left = %d", uhADCxLeft);
-				}else if(uhADCxRight  > 1500){
-						printf("\r\nIR sensor Right = %d", uhADCxRight);
-				}
-		}
+		 }
+   }
+   
 }
 
 
@@ -456,7 +509,7 @@ int main(void)
 	 /**** ES+L9.+Embedded+OS - 28 page 참고 ****/
 		 
 	 /**********여기에 Task 를 생성하시오********/
-	 /*******학번 : 201302476  , 이름 : 전성배 *******/
+	 /*******학번 : 201800000  , 이름 : OOO *******/
 	 
 	 xTaskCreate( Detect_obstacle, "obstacle", 1000, NULL, 2, NULL);
 	 xTaskCreate( IR_Sensor, "IR", 1000, NULL, 2, NULL);

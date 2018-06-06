@@ -905,17 +905,18 @@ ARM Macro Assembler    Page 14
               00000000 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
 erwork --depend=.\output\startup_stm32f429xx.d -o.\output\startup_stm32f429xx.o
- -IC:\Users\tjdqo_000\Desktop\Keil_v5_ARM\project\RTOS\MDK-ARM\RTE -IC:\Keil_v5
-\ARM\PACK\Keil\STM32F4xx_DFP\2.4.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I
-C:\Keil_v5\ARM\CMSIS\Include --predefine="__EVAL SETA 1" --predefine="__MICROLI
+ -IC:\Users\leechungwan\Desktop\임베디드\실습\TermProject_Git\3\Keil_v5_ARM\pro
+ject\RTOS\MDK-ARM\RTE -IC:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.4.0\Drivers\CM
+SIS\Device\ST\STM32F4xx\Include -IC:\Keil_v5\ARM\CMSIS\Include --predefine="__E
 
 
 
 ARM Macro Assembler    Page 15 
 
 
-B SETA 1" --predefine="__UVISION_VERSION SETA 518" --predefine="STM32F429xx SET
-A 1" --list=startup_stm32f429xx.lst startup_stm32f429xx.s
+VAL SETA 1" --predefine="__MICROLIB SETA 1" --predefine="__UVISION_VERSION SETA
+ 518" --predefine="STM32F429xx SETA 1" --list=startup_stm32f429xx.lst startup_s
+tm32f429xx.s
 
 
 

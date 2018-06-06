@@ -141,43 +141,43 @@ PUTCHAR_PROTOTYPE
  void turnLeft(){
 		int index_left;
 		Motor_Stop();
-		osDelay(200);
+		osDelay(500);
 
 		for(index_left=0; index_left<30; index_left++) {
 
 				motorInterrupt1 = 1;
 				Motor_Left();
 
-				while(motorInterrupt1 < 30.5) { 								
+				while(motorInterrupt1 < 31) { 								
 						vTaskDelay(1/portTICK_RATE_MS);
 				}
 		}
 		Motor_Stop();
-		osDelay(200);
+		osDelay(500);
 }
  
 // 우회전하기 위한 함수
  void turnRight(){
 		int index_right;
 		Motor_Stop();
-		osDelay(200);
+		osDelay(500);
 		for(index_right=0; index_right<30; index_right++) {
 				motorInterrupt2 = 1; 
 				Motor_Right();
 
-				while(motorInterrupt2 < 31.5) { 						
+				while(motorInterrupt2 < 31) { 						
 						vTaskDelay(1/portTICK_RATE_MS);
 				}
 		} 		
 		Motor_Stop();
-		osDelay(200);						 
+		osDelay(500);						 
 }
  
 
  void turnLeft2(){
 		int index_left2;
 
-		for(index_left2=0; index_left2<2; index_left2++) {
+		for(index_left2=0; index_left2<1; index_left2++) {
 				Motor_Stop();
 
 				motorInterrupt1 = 1;
@@ -188,13 +188,15 @@ PUTCHAR_PROTOTYPE
 				}
 
 				Motor_Stop();
+
 		}
 }
  
  void turnRight2(){
 		int index_right2;
-		for(index_right2=0; index_right2<2; index_right2++) {
+		for(index_right2=0; index_right2<1; index_right2++) {
 				Motor_Stop();
+
 				motorInterrupt2 = 1;
 				Motor_Right();
 
@@ -218,10 +220,10 @@ void Detect_obstacle(){
 	for(;;)
     {
 						osDelay(100);
-            if(uwDiffCapture2 > 0 && uwDiffCapture2 < 900){         
+            if(uwDiffCapture2 > 0 && uwDiffCapture2 < 800){         
                   result = 1;                     
             }
-            else{
+            else if(result != 3 || result != 4){
                   result = 0;
             }
     }
@@ -281,7 +283,8 @@ void Detect_obstacle(){
 				}else if(uhADCxRight >930){
 						result=3;
 						//printf("\r\n result = %d", result);
-
+				}else if(result != 1){
+						result = 0;
 				}
 		} 
 }

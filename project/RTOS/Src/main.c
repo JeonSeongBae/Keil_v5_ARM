@@ -212,6 +212,10 @@ PUTCHAR_PROTOTYPE
 /*********************************  task ************************************/
 uint32_t result = 0;
 uint32_t forward = 0;
+uint32_t leftCount = 0;
+uint32_t rightCount = 0;
+uint32_t checkBackLeft = 0;
+uint32_t checkBackRight = 0;
 
 void Detect_obstacle(){
   osDelay(200);
@@ -220,7 +224,7 @@ void Detect_obstacle(){
 	for(;;)
     {
 						osDelay(100);
-            if(uwDiffCapture2 > 0 && uwDiffCapture2 < 800){         
+            if(uwDiffCapture2 > 0 && uwDiffCapture2 < 700){         
                   result = 1;                     
             }
             else if(result != 3 || result != 4){
@@ -237,12 +241,37 @@ void Detect_obstacle(){
 		for(;;){
 				if(result == 1){
 						Motor_Stop();
-						if(uwDiffCapture1 < uwDiffCapture3){
-								turnLeft();
-						}else{
+							// 처음 좌/우, 우/좌 코드 if문 과 else if문.
+							if(leftCount == 1 && rightCount == 0){
 								turnRight();
+								rightCount++;
+								checkBackRight++;
+							}else if(rightCount == 1 && leftCount == 0){
+								turnLeft();
+								leftCount++;
+								checkBackLeft++;
+							}else{
+									if(uwDiffCapture1 < uwDiffCapture3){
+										leftCount++;
+										checkBackLeft++;
+										checkBackRight = 0;
+										if(checkBackLeft % 3 == 0){
+											turnLeft();
+											Motor_Stop();
+										}
+										turnLeft();
+							}else{
+									rightCount++;
+									checkBackRight++;
+									checkBackLeft = 0;
+									if(checkBackRight % 3 == 0){
+											turnRight();
+											Motor_Stop();
+										}
+									turnRight();
+							}
+							Motor_Stop();
 						}
-						Motor_Stop();
 				}else if(result == 0){
 						Motor_Forward();
 				}else if(result == 3){
@@ -329,7 +358,7 @@ int main(void)
    sConfig1.OCMode     = TIM_OCMODE_PWM1;
    sConfig1.OCPolarity = TIM_OCPOLARITY_HIGH;
    sConfig1.OCFastMode = TIM_OCFAST_DISABLE;
-   sConfig1.Pulse = 20000;
+   sConfig1.Pulse = 19500;
    
    TimHandle1.Instance = TIM8;
    TimHandle1.Init.Prescaler     = uwPrescalerValue;

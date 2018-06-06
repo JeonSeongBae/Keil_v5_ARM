@@ -174,34 +174,28 @@ Motor_Stop();
  
 
  void turnLeft2(){
-               int i;
-               
-               for(i=0; i<3; i++) {
-                           Motor_Stop();
-								 
-                           motorInterrupt1 = 1;
-														Motor_Left();
-                                                
-                           while(motorInterrupt1 < 2) { 								
-                                    vTaskDelay(1/portTICK_RATE_MS);  
-                           }
 
-                           Motor_Stop();
-                }
+			Motor_Stop();
+
+			motorInterrupt1 = 1;
+			Motor_Left();
+
+			while(motorInterrupt1 < 10) { 								
+					vTaskDelay(1/portTICK_RATE_MS);  
+			}
+
+			Motor_Stop();
 }
  
  void turnRight2(){
-             int j;
-             for(j=0; j<3; j++) {
-							Motor_Stop();
-							motorInterrupt2 = 1; //
-							Motor_Right();
-                                               
-							while(motorInterrupt2 < 2) {
-								vTaskDelay(1/portTICK_RATE_MS); 
-							}
-							Motor_Stop();
-							} 						 						 
+			Motor_Stop();
+			motorInterrupt2 = 1; //
+			Motor_Right();
+
+			while(motorInterrupt2 < 10) {
+					vTaskDelay(1/portTICK_RATE_MS); 
+			}
+			Motor_Stop();
 }
 
 
@@ -509,7 +503,7 @@ int main(void)
 	 /**** ES+L9.+Embedded+OS - 28 page 참고 ****/
 		 
 	 /**********여기에 Task 를 생성하시오********/
-	 /*******학번 : 201800000  , 이름 : OOO *******/
+	 /*******학번 : 201302476  , 이름 : 전성배 *******/
 	 
 	 xTaskCreate( Detect_obstacle, "obstacle", 1000, NULL, 2, NULL);
 	 xTaskCreate( IR_Sensor, "IR", 1000, NULL, 2, NULL);

@@ -137,65 +137,72 @@ PUTCHAR_PROTOTYPE
   * @retval None
   */
 
-//¿ÞAEA¸·I 90μμ μ¹±aA§CN CO¼o
+// 좌회전하기 위한 함수
  void turnLeft(){
-               int i;
-							Motor_Stop();
-							osDelay(200);
+		int index_left;
+		Motor_Stop();
+		osDelay(200);
 
-               for(i=0; i<30; i++) {
-								 
-                           motorInterrupt1 = 1;
-														Motor_Left();
-                                                
-                           while(motorInterrupt1 < 31) { 								
-                                    vTaskDelay(1/portTICK_RATE_MS);
-                           }
-                }
-							 Motor_Stop();
-							osDelay(200);
+		for(index_left=0; index_left<30; index_left++) {
+
+				motorInterrupt1 = 1;
+				Motor_Left();
+
+				while(motorInterrupt1 < 30.5) { 								
+						vTaskDelay(1/portTICK_RATE_MS);
+				}
+		}
+		Motor_Stop();
+		osDelay(200);
 }
  
+// 우회전하기 위한 함수
  void turnRight(){
-             int j;
-	 Motor_Stop();
-							osDelay(200);
-             for(j=0; j<30; j++) {
-							motorInterrupt2 = 1; 
-							Motor_Right();
-                                               
-							while(motorInterrupt2 < 31) { 						
-								vTaskDelay(1/portTICK_RATE_MS);
-							}
-							} 		
-Motor_Stop();
-							osDelay(200);						 
+		int index_right;
+		Motor_Stop();
+		osDelay(200);
+		for(index_right=0; index_right<30; index_right++) {
+				motorInterrupt2 = 1; 
+				Motor_Right();
+
+				while(motorInterrupt2 < 31.5) { 						
+						vTaskDelay(1/portTICK_RATE_MS);
+				}
+		} 		
+		Motor_Stop();
+		osDelay(200);						 
 }
  
 
  void turnLeft2(){
+		int index_left2;
 
-			Motor_Stop();
+		for(index_left2=0; index_left2<2; index_left2++) {
+				Motor_Stop();
 
-			motorInterrupt1 = 1;
-			Motor_Left();
+				motorInterrupt1 = 1;
+				Motor_Left();
 
-			while(motorInterrupt1 < 10) { 								
-					vTaskDelay(1/portTICK_RATE_MS);  
-			}
+				while(motorInterrupt1 < 2) { 								
+						vTaskDelay(1/portTICK_RATE_MS);  
+				}
 
-			Motor_Stop();
+				Motor_Stop();
+		}
 }
  
  void turnRight2(){
-			Motor_Stop();
-			motorInterrupt2 = 1; //
-			Motor_Right();
+		int index_right2;
+		for(index_right2=0; index_right2<2; index_right2++) {
+				Motor_Stop();
+				motorInterrupt2 = 1;
+				Motor_Right();
 
-			while(motorInterrupt2 < 10) {
-					vTaskDelay(1/portTICK_RATE_MS); 
-			}
-			Motor_Stop();
+				while(motorInterrupt2 < 2) {
+						vTaskDelay(1/portTICK_RATE_MS); 
+				}
+				Motor_Stop();
+		} 						 						 
 }
 
 
@@ -211,89 +218,73 @@ void Detect_obstacle(){
 	for(;;)
     {
 						osDelay(100);
-            if( uwDiffCapture2/58 > 0 && uwDiffCapture2/58 < 18 )
-            {         
-                  result = 1;
-                     printf("\r\n result = %d", result);
-                     
+            if(uwDiffCapture2 > 0 && uwDiffCapture2 < 900){         
+                  result = 1;                     
             }
-            else
-            {
+            else{
                   result = 0;
-                     printf("\r\n result = %d", result);
             }
     }
 }
 
-void Motor_control(){
-	osDelay(200);
-	printf("\r\n Motor_control");
-	Motor_Forward();
-	
-   for(;;)
-    {
+ void Motor_control(){
+		osDelay(200);
+		printf("\r\n Motor_control");
+		Motor_Forward();
 
-            if(result == 1)
-						{
-							Motor_Stop();
-							if(uwDiffCapture1 < uwDiffCapture3){
-							turnLeft();
-							}else{
-							turnRight();
-							}
-						  Motor_Stop();
-						}else if(result == 0){
-							Motor_Forward(); 
-
-						}else if(result == 3){
-														Motor_Stop();
-
-									turnLeft2();
-														Motor_Stop();
-
-						}else if(result == 4){
-							Motor_Stop();
-
-							turnRight2();
-														Motor_Stop();
-
+		for(;;){
+				if(result == 1){
+						Motor_Stop();
+						if(uwDiffCapture1 < uwDiffCapture3){
+								turnLeft();
+						}else{
+								turnRight();
 						}
-    }
-   
+						Motor_Stop();
+				}else if(result == 0){
+						Motor_Forward();
+				}else if(result == 3){
+						Motor_Stop();
+						turnLeft2();
+						Motor_Stop();
+				}else if(result == 4){
+						Motor_Stop();
+						turnRight2();
+						Motor_Stop();
+				}
+		}
 }
 
 /* 적외선 생성 */
-void IR_Sensor(){
-   for(;;){
-      
-      HAL_ADC_Start(&AdcHandle1);
-      uhADCxLeft = HAL_ADC_GetValue(&AdcHandle1);
-      HAL_ADC_PollForConversion(&AdcHandle1, 0xFF);   
-      if(uhADCxLeft >2000) uhADCxLeft= 2000;
-      else if(uhADCxLeft<100) uhADCxLeft = 100;
+ void IR_Sensor(){
+		for(;;){
 
-		 printf("\r\nIR sensor Left = %d", uhADCxLeft);
-      
-      HAL_ADC_Start(&AdcHandle2);
-      uhADCxRight = HAL_ADC_GetValue(&AdcHandle2);
-      HAL_ADC_PollForConversion(&AdcHandle2, 0xFF);
-      if(uhADCxRight >2000) uhADCxRight= 2000;
-      else if(uhADCxRight<100) uhADCxRight = 100;
-      printf("\r\nIR sensor Right = %d", uhADCxRight);
-		 
-      if(uhADCxLeft >900){
-               result =4;
-				                     printf("\r\n result = %d", result);
+				HAL_ADC_Start(&AdcHandle1);
+				uhADCxLeft = HAL_ADC_GetValue(&AdcHandle1);
+				HAL_ADC_PollForConversion(&AdcHandle1, 0xFF);   
+				if(uhADCxLeft >2000) uhADCxLeft= 2000;
+				else if(uhADCxLeft<100) uhADCxLeft = 100;
 
-		 }else if(uhADCxRight >880){
-								result=3;
-			                      printf("\r\n result = %d", result);
+				//printf("\r\nIR sensor Left = %d", uhADCxLeft);
 
-		 }
-   }
-   
+				HAL_ADC_Start(&AdcHandle2);
+				uhADCxRight = HAL_ADC_GetValue(&AdcHandle2);
+				HAL_ADC_PollForConversion(&AdcHandle2, 0xFF);
+				if(uhADCxRight >2000) uhADCxRight= 2000;
+				else if(uhADCxRight<100) uhADCxRight = 100;
+				printf("\r\nIR sensor Right = %d", uhADCxRight);
+
+				if(uhADCxLeft >950){
+						result =4;
+						//printf("\r\n result = %d", result);
+
+				}else if(uhADCxRight >930){
+						result=3;
+						//printf("\r\n result = %d", result);
+
+				}
+		} 
 }
-
 
 /***************************************************************************/
 int main(void)

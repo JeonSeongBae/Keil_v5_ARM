@@ -11,17 +11,17 @@
     <View>
       <WinId>38003</WinId>
       <ViewName>Registers</ViewName>
-      <TableColWidths>115 100</TableColWidths>
+      <TableColWidths>115 67</TableColWidths>
     </View>
     <View>
       <WinId>346</WinId>
       <ViewName>Code Coverage</ViewName>
-      <TableColWidths>770 560</TableColWidths>
+      <TableColWidths>770 160</TableColWidths>
     </View>
     <View>
       <WinId>204</WinId>
       <ViewName>Performance Analyzer</ViewName>
-      <TableColWidths>952 139 139 100</TableColWidths>
+      <TableColWidths>930</TableColWidths>
     </View>
   </SECTreeCtrl>
 
@@ -75,8 +75,8 @@
       <flags>2</flags>
       <showCmd>3</showCmd>
       <MinPosition>
-        <xPos>-1</xPos>
-        <yPos>-1</yPos>
+        <xPos>-32000</xPos>
+        <yPos>-32000</yPos>
       </MinPosition>
       <MaxPosition>
         <xPos>-1</xPos>
@@ -2588,9 +2588,9 @@
       <ActiveTab>0</ActiveTab>
       <Doc>
         <Name>..\Src\main.c</Name>
-        <ColumnNumber>0</ColumnNumber>
-        <TopLine>334</TopLine>
-        <CurrentLine>344</CurrentLine>
+        <ColumnNumber>38</ColumnNumber>
+        <TopLine>253</TopLine>
+        <CurrentLine>285</CurrentLine>
         <Folding>1</Folding>
         <ContractedFolders></ContractedFolders>
         <PaneID>0</PaneID>

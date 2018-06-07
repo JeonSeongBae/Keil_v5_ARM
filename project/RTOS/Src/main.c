@@ -141,11 +141,11 @@ PUTCHAR_PROTOTYPE
  void turnLeft(){
 		int index_left;
 		Motor_Stop();
-		osDelay(200);
+//		osDelay(200);
 
-		for(index_left=0; index_left<25; index_left++) {
+		for(index_left=0; index_left<31; index_left++) {
 				Motor_Stop();
-				osDelay(5);
+//				osDelay(5);
 			
 				motorInterrupt1 = 1;
 				Motor_Left();
@@ -158,18 +158,18 @@ PUTCHAR_PROTOTYPE
 
 		}
 		Motor_Stop();
-		osDelay(200);
+//		osDelay(200);
 }
  
 // 우회전하기 위한 함수
  void turnRight(){
 		int index_right;
 		Motor_Stop();
-		osDelay(200);
-		for(index_right=0; index_right<31; index_right++) {
+//		osDelay(200);
+		for(index_right=0; index_right<32; index_right++) {
 				
 				Motor_Stop();
-				osDelay(5);
+//				osDelay(5);
 				
 				motorInterrupt2 = 1; 
 				Motor_Right();
@@ -182,7 +182,7 @@ PUTCHAR_PROTOTYPE
 
 		} 		
 		Motor_Stop();
-		osDelay(200);						 
+//		osDelay(200);						 
 }
  
 
@@ -196,7 +196,7 @@ PUTCHAR_PROTOTYPE
 				motorInterrupt1 = 1;
 				Motor_Left();
 
-				while(motorInterrupt1 < 11) { 								
+				while(motorInterrupt1 < 12) { 								
 						vTaskDelay(1/portTICK_RATE_MS);  
 				}
 
@@ -216,7 +216,27 @@ PUTCHAR_PROTOTYPE
 				motorInterrupt2 = 1;
 				Motor_Right();
 
-				while(motorInterrupt2 < 11) {
+				while(motorInterrupt2 < 12) {
+						vTaskDelay(1/portTICK_RATE_MS); 
+				}
+				Motor_Stop();
+		}
+		Motor_Stop();
+
+}
+ 
+ void littleBack(){
+		int index_back;
+	 osDelay(100);
+		for(index_back=0; index_back < 20; index_back++) {
+				Motor_Stop();
+				osDelay(10);
+			
+				motorInterrupt1 = 1;
+				motorInterrupt2 = 1;
+				Motor_Backward();
+
+				while(	motorInterrupt1 < 60 || motorInterrupt2 < 60) {
 						vTaskDelay(1/portTICK_RATE_MS); 
 				}
 				Motor_Stop();
@@ -242,11 +262,11 @@ void Detect_obstacle(){
 	for(;;)
     {
 						osDelay(50);
-            if(uwDiffCapture2 > 0 && uwDiffCapture2 < 760){         
+            if(uwDiffCapture2 > 0 && uwDiffCapture2 < 740){         
                   result = 1;                     
-            }else if(uwDiffCapture1 < 190){
+            }else if(uwDiffCapture1 < 180){
 									result = 3;
-						}else if(uwDiffCapture3 < 190){
+						}else if(uwDiffCapture3 < 180){
 									result = 4;
 						}else if(result != 3 || result != 4){
                   result = 0;
@@ -264,32 +284,36 @@ void Detect_obstacle(){
 						Motor_Stop();
 							// 처음 좌/우, 우/좌 코드 if문 과 else if문.
 							if(leftCount == 1 && rightCount == 0){
+								littleBack();
 								turnRight();
-//								rightCount++;
-//								checkBackRight++;
+
+								rightCount++;
+								checkBackRight++;
 							}else if(rightCount == 1 && leftCount == 0){
 								turnLeft();
-//								leftCount++;
-//								checkBackLeft++;
+								leftCount++;
+								checkBackLeft++;
 							}else{
 									if(uwDiffCapture1 < uwDiffCapture3){
-//										leftCount++;
-//										checkBackLeft++;
-//										checkBackRight = 0;
-//										if(checkBackLeft % 3 == 0){
+										leftCount++;
+										checkBackLeft++;
+										checkBackRight = 0;
+										if(checkBackLeft % 3 == 0){
 											turnLeft();
 											Motor_Stop();
-//										}
-//										turnLeft();
+										}
+										turnLeft();
 							}else{
-//									rightCount++;
-//									checkBackRight++;
-//									checkBackLeft = 0;
-//									if(checkBackRight % 3 == 0){
+									rightCount++;
+									checkBackRight++;
+									checkBackLeft = 0;
+									if(checkBackRight % 3 == 0){
+											littleBack();
 											turnRight();
-//											Motor_Stop();
-//										}
-//									turnRight();
+											Motor_Stop();
+										}
+									littleBack();
+									turnRight();
 							}
 							Motor_Stop();
 						}
@@ -326,11 +350,11 @@ void Detect_obstacle(){
 				else if(uhADCxRight<100) uhADCxRight = 100;
 				printf("\r\nIR sensor Right = %d", uhADCxRight);
 
-				if(uhADCxLeft >880){
+				if(uhADCxLeft > 840){
 						result =4;
 						//printf("\r\n result = %d", result);
 
-				}else if(uhADCxRight >880){
+				}else if(uhADCxRight > 850){
 						result=3;
 						//printf("\r\n result = %d", result);
 				}else if(result != 1){

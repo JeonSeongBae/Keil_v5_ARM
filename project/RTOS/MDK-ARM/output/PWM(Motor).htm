@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\output\PWM(Motor).axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\output\PWM(Motor).axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Thu Jun 07 02:12:57 2018
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Thu Jun 07 03:51:20 2018
 <BR><P>
 <H3>Maximum Stack Usage =        264 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -647,7 +647,7 @@ Global Symbols
 <P><STRONG><a name="[7]"></a>DebugMon_Handler</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, stm32f4xx_it.o(i.DebugMon_Handler))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f429xx.o(RESET)
 </UL>
-<P><STRONG><a name="[68]"></a>Detect_obstacle</STRONG> (Thumb, 44 bytes, Stack size 0 bytes, main.o(i.Detect_obstacle))
+<P><STRONG><a name="[68]"></a>Detect_obstacle</STRONG> (Thumb, 76 bytes, Stack size 0 bytes, main.o(i.Detect_obstacle))
 <BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = Detect_obstacle &rArr; osDelay &rArr; vTaskDelay &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osDelay
@@ -1031,7 +1031,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f429xx.o(RESET)
 </UL>
-<P><STRONG><a name="[69]"></a>IR_Sensor</STRONG> (Thumb, 142 bytes, Stack size 0 bytes, main.o(i.IR_Sensor))
+<P><STRONG><a name="[69]"></a>IR_Sensor</STRONG> (Thumb, 138 bytes, Stack size 0 bytes, main.o(i.IR_Sensor))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = IR_Sensor &rArr; __2printf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_ADC_Start
@@ -1086,8 +1086,8 @@ Global Symbols
 <LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Motor_control
 </UL>
 
-<P><STRONG><a name="[6a]"></a>Motor_control</STRONG> (Thumb, 214 bytes, Stack size 0 bytes, main.o(i.Motor_control))
-<BR><BR>[Stack]<UL><LI>Max Depth = 104<LI>Call Chain = Motor_control &rArr; turnRight &rArr; osDelay &rArr; vTaskDelay &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+<P><STRONG><a name="[6a]"></a>Motor_control</STRONG> (Thumb, 126 bytes, Stack size 0 bytes, main.o(i.Motor_control))
+<BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = Motor_control &rArr; turnRight2 &rArr; osDelay &rArr; vTaskDelay &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osDelay
 <LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;turnRight2
@@ -1213,7 +1213,9 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
 </UL>
-<BR>[Called By]<UL><LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;turnRight
+<BR>[Called By]<UL><LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;turnRight2
+<LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;turnRight
+<LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;turnLeft2
 <LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;turnLeft
 <LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Motor_control
 <LI><a href="#[68]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Detect_obstacle
@@ -1237,8 +1239,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xTaskGenericCreate
 </UL>
 
-<P><STRONG><a name="[c6]"></a>turnLeft</STRONG> (Thumb, 64 bytes, Stack size 24 bytes, main.o(i.turnLeft))
-<BR><BR>[Stack]<UL><LI>Max Depth = 104<LI>Call Chain = turnLeft &rArr; osDelay &rArr; vTaskDelay &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+<P><STRONG><a name="[c6]"></a>turnLeft</STRONG> (Thumb, 74 bytes, Stack size 16 bytes, main.o(i.turnLeft))
+<BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = turnLeft &rArr; osDelay &rArr; vTaskDelay &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
 <LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osDelay
@@ -1248,18 +1250,19 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Motor_control
 </UL>
 
-<P><STRONG><a name="[c7]"></a>turnLeft2</STRONG> (Thumb, 38 bytes, Stack size 8 bytes, main.o(i.turnLeft2))
-<BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = turnLeft2 &rArr; vTaskDelay &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+<P><STRONG><a name="[c7]"></a>turnLeft2</STRONG> (Thumb, 56 bytes, Stack size 16 bytes, main.o(i.turnLeft2))
+<BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = turnLeft2 &rArr; osDelay &rArr; vTaskDelay &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
+<LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osDelay
 <LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Motor_Stop
 <LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Motor_Left
 </UL>
 <BR>[Called By]<UL><LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Motor_control
 </UL>
 
-<P><STRONG><a name="[c5]"></a>turnRight</STRONG> (Thumb, 64 bytes, Stack size 24 bytes, main.o(i.turnRight))
-<BR><BR>[Stack]<UL><LI>Max Depth = 104<LI>Call Chain = turnRight &rArr; osDelay &rArr; vTaskDelay &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+<P><STRONG><a name="[c5]"></a>turnRight</STRONG> (Thumb, 74 bytes, Stack size 16 bytes, main.o(i.turnRight))
+<BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = turnRight &rArr; osDelay &rArr; vTaskDelay &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
 <LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osDelay
@@ -1269,10 +1272,11 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Motor_control
 </UL>
 
-<P><STRONG><a name="[c4]"></a>turnRight2</STRONG> (Thumb, 38 bytes, Stack size 8 bytes, main.o(i.turnRight2))
-<BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = turnRight2 &rArr; vTaskDelay &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
+<P><STRONG><a name="[c4]"></a>turnRight2</STRONG> (Thumb, 56 bytes, Stack size 16 bytes, main.o(i.turnRight2))
+<BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = turnRight2 &rArr; osDelay &rArr; vTaskDelay &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
+<LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osDelay
 <LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Motor_Stop
 <LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Motor_Right
 </UL>

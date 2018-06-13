@@ -528,9 +528,9 @@ int main(void)
 	 /**********여기에 Task 를 생성하시오********/
 	 /*******학번 : 201302476  , 이름 : 전성배 *******/
 	 
-	 xTaskCreate( Detect_obstacle, "obstacle", 1000, NULL, 2, NULL);
-	 xTaskCreate( IR_Sensor, "IR", 1000, NULL, 2, NULL);
-	 xTaskCreate( Motor_control, "motor", 1000, NULL, 2, NULL);
+	 xTaskCreate( Detect_obstacle, "obstacle", 800, NULL, 2, NULL);
+	 xTaskCreate( IR_Sensor, "IR", 600, NULL, 2, NULL);
+	 xTaskCreate( Motor_control, "motor", 150, NULL, 2, NULL);
 
 	 vTaskStartScheduler();
 	 
